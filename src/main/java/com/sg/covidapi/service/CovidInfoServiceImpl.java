@@ -30,30 +30,37 @@ public class CovidInfoServiceImpl implements CovidInfoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<CaseSummary> responseCaseSummary = new ArrayList<>();
-        String response= appRestClient.getForObject("https://corona.lmao.ninja/v2/continents?yesterday=true&sort=", String.class);
-        JsonNode rawNode = objectMapper.readTree(response);
-        String continent =null;
-        Map<String,String> fieldMap = new HashMap<>();
+        try{
+            String response= appRestClient.getForObject("https://corona.lmao.ninja/v2/continents?yesterday=true&sort=", String.class);
+            JsonNode rawNode = objectMapper.readTree(response);
 
-        Iterator<JsonNode> iterator = rawNode.elements();
-        String[] printFieldArr = printFields.split(",");
-        while(iterator.hasNext())
-        {
-            JsonNode childNode = iterator.next();
+            Map<String,String> fieldMap = new HashMap<>();
 
-            if(Arrays.stream(printFieldArr).anyMatch("cases"::equals))
-                fieldMap.put("cases",childNode.get("cases").asText());
-            if(Arrays.stream(printFieldArr).anyMatch("active"::equals))
-                fieldMap.put("active",childNode.get("active").asText());
-            if(Arrays.stream(printFieldArr).anyMatch("critical"::equals))
-                fieldMap.put("critical",childNode.get("critical").asText());
-            if(Arrays.stream(printFieldArr).anyMatch("deaths"::equals))
-                fieldMap.put("deaths",childNode.get("deaths").asText());
-            if(Arrays.stream(printFieldArr).anyMatch("continent"::equals))
-                fieldMap.put("continent",childNode.get("continent").asText());
-            //responseCaseSummary.add(new CaseSummary(cases,active,critical,death,continent));
-            responseCaseSummary.add(new CaseSummary(fieldMap));
+            Iterator<JsonNode> iterator = rawNode.elements();
+            String[] printFieldArr = printFields.split(",");
+            while(iterator.hasNext())
+            {
+                JsonNode childNode = iterator.next();
+
+                if(Arrays.stream(printFieldArr).anyMatch("cases"::equals))
+                    fieldMap.put("cases",childNode.get("cases").asText());
+                if(Arrays.stream(printFieldArr).anyMatch("active"::equals))
+                    fieldMap.put("active",childNode.get("active").asText());
+                if(Arrays.stream(printFieldArr).anyMatch("critical"::equals))
+                    fieldMap.put("critical",childNode.get("critical").asText());
+                if(Arrays.stream(printFieldArr).anyMatch("deaths"::equals))
+                    fieldMap.put("deaths",childNode.get("deaths").asText());
+                if(Arrays.stream(printFieldArr).anyMatch("continent"::equals))
+                    fieldMap.put("continent",childNode.get("continent").asText());
+                //responseCaseSummary.add(new CaseSummary(cases,active,critical,death,continent));
+                responseCaseSummary.add(new CaseSummary(fieldMap));
+            }
         }
+        catch (Exception e)
+        {
+            LOGGER.error("Error fetching covid data");
+        }
+
         LOGGER.info("getting data from remomte call");
         //responseCaseSummary.sort(Comparator.comparing(c->c.getActive()));
         //responseCaseSummary = responseCaseSummary.stream().sorted(Comparator.comparing(CaseSummary::getActive).reversed()).collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.sg.covidapi.job;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sg.covidapi.job.jdbc.CovidDataDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +18,8 @@ public class CovidJob {
     @Autowired
     CovidDataDao covidDataDao;
 
-    @Scheduled(fixedRate = 5000L)
-    void someJob() {
+//    @Scheduled(fixedRate = 5000L)
+    void someJob() throws JsonProcessingException {
         System.out.println("Time is now - " + new Date());
 
         covidDataDao.insertCovidData();

@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +19,7 @@ import java.util.Collections;
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
+@EnableRetry
 public class CovidApiApplication {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CovidApiApplication.class);;

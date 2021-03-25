@@ -1,6 +1,7 @@
 package com.sg.covidapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sg.covidapi.exception.ApiError;
 import com.sg.covidapi.service.CovidInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,8 @@ public class GetCovidDataController {
     public ResponseEntity<Object> covidSearch(@RequestParam(required = false, defaultValue = "default") String searchType
                                              ,@RequestParam(required = false, defaultValue = "cases,active,continent") String printFields) throws JsonProcessingException {
         if(searchType.equals("default"))
-        return new ResponseEntity<>(covidInfoService.callSummaryRestService(printFields), HttpStatus.OK) ;
+            return new ResponseEntity<>(covidInfoService.callSummaryRestService(printFields), HttpStatus.OK) ;
+
         else return new ResponseEntity<>("The api is under construction", HttpStatus.NOT_FOUND);
     }
 }
